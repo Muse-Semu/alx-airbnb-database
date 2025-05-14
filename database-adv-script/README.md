@@ -1,14 +1,18 @@
-# AirBnB Clone Complex Join Queries
+# AirBnB Clone Advanced SQL Queries
 
 ## Overview
-This directory (`database-adv-script/`) contains SQL queries demonstrating the use of different types of joins for the AirBnB Clone project database. The queries operate on the normalized database schema defined in previous tasks, using INNER JOIN, LEFT JOIN, and FULL OUTER JOIN to retrieve data from the `users`, `properties`, `bookings`, and `reviews` tables.
+This directory (`database-adv-script/`) contains SQL queries demonstrating advanced database operations for the AirBnB Clone project. The queries cover three key areas: complex joins, subqueries, and aggregations/window functions. They operate on the normalized database schema defined in previous tasks, including tables such as `users`, `properties`, `bookings`, and `reviews`.
 
 ## Files
-- **joins_queries.sql**: Contains three SQL queries showcasing complex joins.
-- **README.md**: This file, describing the purpose and contents of the directory.
+- **joins_queries.sql**: SQL queries showcasing INNER JOIN, LEFT JOIN, and FULL OUTER JOIN.
+- **subqueries.sql**: SQL queries demonstrating non-correlated and correlated subqueries.
+- **aggregations_and_window_functions.sql**: SQL queries using aggregation (COUNT, GROUP BY) and window functions (RANK).
+- **README.md**: This file, describing the purpose and contents of all queries in the directory.
 
 ## Query Details
-The `joins_queries.sql` file includes the following queries:
+
+### 1. Join Queries (`joins_queries.sql`)
+The following queries demonstrate the use of different types of joins:
 
 1. **INNER JOIN Query**:
    - **Purpose**: Retrieves all bookings and the respective users who made those bookings.
@@ -31,20 +35,30 @@ The `joins_queries.sql` file includes the following queries:
    - **Output**: User details (ID, name, email, role) and booking details (ID, property, dates, price, status), with NULL where no match exists.
    - **Behavior**: Includes all users and bookings, even unmatched ones.
 
-## Usage
-- **Prerequisites**:
-  - Use a PostgreSQL database with the schema from `alx-airbnb-database` (e.g., `database-script-0x01/schema.sql`).
-  - Ensure the `uuid-ossp` extension is enabled for UUIDs.
-  - Populate the database with sample data (e.g., from `database-script-0x02/seed.sql`).
-- **Run the Queries**:
-  ```bash
-  psql -U <username> -d <database> -f joins_queries.sql
-  ```
-- **Verify**: Execute each query individually in a SQL client to view results:
-  ```sql
-  \i joins_queries.sql
-  ```
+### 2. Subqueries (`subqueries.sql`)
+The following queries demonstrate non-correlated and correlated subqueries:
+
+1. **Non-Correlated Subquery**:
+   - **Purpose**: Finds all properties where the average rating is greater than 4.0.
+   - **Tables**: `properties`, `reviews`.
+   - **Subquery**: Computes the average rating per property in the `reviews` table, grouping by `property_id` and filtering for averages > 4.0.
+   - **Outer Query**: Selects properties whose `property_id` is in the subquery results.
+   - **Output**: Property details (ID, name, price, host ID).
+   - **Behavior**: Returns only properties with an average rating above 4.0.
+
+2. **Correlated Subquery**:
+   - **Purpose**: Finds users who have made more than 3 bookings.
+   - **Tables**: `users`, `bookings`.
+   - **Subquery**: Counts the number of bookings in the `bookings` table for each user, referencing the `user_id` from the outer `users` table.
+   - **Outer Query**: Selects users where the subquery count exceeds 3.
+   - **Output**: User details (ID, name, email, role).
+   - **Behavior**: Returns users with more than 3 bookings.
+
+
 
 ## Notes
 - The queries assume PostgreSQL due to its support for UUIDs and the schema design. For other databases, modifications may be needed (e.g., replace UUID with another key type).
-- The queries are optimized for readability and performance, using appropriate fields and sorting.
+- All queries are optimized for readability and performance, using appropriate fields and sorting.
+- The schema and sample data from previous tasks ensure realistic results (e.g., bookings linked to users, properties with varying reviews).
+- The queries complement each other, providing a comprehensive set of advanced SQL techniques for data analysis.
+- For schema details, refer to the `database-script-0x01/` directory in the `alx-airbnb-database` repository.

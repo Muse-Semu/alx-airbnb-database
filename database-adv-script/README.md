@@ -54,7 +54,40 @@ The following queries demonstrate non-correlated and correlated subqueries:
    - **Output**: User details (ID, name, email, role).
    - **Behavior**: Returns users with more than 3 bookings.
 
+### 3. Aggregations and Window Functions (`aggregations_and_window_functions.sql`)
+The following queries demonstrate aggregation and window functions:
 
+1. **Aggregation Query**:
+   - **Purpose**: Finds the total number of bookings made by each user.
+   - **Tables**: `users`, `bookings`.
+   - **Approach**: Uses `COUNT` to tally bookings and `GROUP BY` to group by user. Joins `users` and `bookings` with `LEFT JOIN` to include users with zero bookings.
+   - **Output**: User details (ID, name, email) and the total number of bookings.
+   - **Behavior**: Returns all users, with booking counts (0 or more).
+
+2. **Window Function Query**:
+   - **Purpose**: Ranks properties based on the total number of bookings they have received.
+   - **Tables**: `properties`, `bookings`.
+   - **Approach**: Aggregates bookings per property using `COUNT` and `GROUP BY`, then applies `RANK()` over the booking count in descending order.
+   - **Output**: Property details (ID, name, price), total bookings, and booking rank.
+   - **Behavior**: Assigns ranks to properties, with the highest booking count ranked 1.
+
+## Usage
+- **Prerequisites**:
+  - Use a PostgreSQL database with the schema from `alx-airbnb-database` (e.g., `database-script-0x01/schema.sql`).
+  - Ensure the `uuid-ossp` extension is enabled for UUIDs.
+  - Populate the database with sample data (e.g., from `database-script-0x02/seed.sql`).
+- **Run the Queries**:
+  ```bash
+  psql -U <username> -d <database> -f joins_queries.sql
+  psql -U <username> -d <database> -f subqueries.sql
+  psql -U <username> -d <database> -f aggregations_and_window_functions.sql
+  ```
+- **Verify**: Execute each query individually in a SQL client to view results:
+  ```sql
+  \i joins_queries.sql
+  \i subqueries.sql
+  \i aggregations_and_window_functions.sql
+  ```
 
 ## Notes
 - The queries assume PostgreSQL due to its support for UUIDs and the schema design. For other databases, modifications may be needed (e.g., replace UUID with another key type).
